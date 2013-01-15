@@ -1,2 +1,2 @@
-include 'commons-util'
-include 'commons-ipc'
+rootProject.name='netflix-commons' // TEMPLATE: Change this
+include 'netflix-commons-util'
