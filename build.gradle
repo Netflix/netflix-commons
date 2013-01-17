@@ -28,3 +28,6 @@ subprojects {
 
 project(':netflix-commons-util') {
 }
+
+project(':netflix-statistics') {
+}

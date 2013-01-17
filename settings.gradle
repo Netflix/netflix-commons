@@ -1,2 +1,3 @@
 rootProject.name='netflix-commons' // TEMPLATE: Change this
 include 'netflix-commons-util'
+include 'netflix-statistics'
