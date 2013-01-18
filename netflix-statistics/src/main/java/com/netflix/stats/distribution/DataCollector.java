@@ -21,7 +21,7 @@ package com.netflix.stats.distribution;
 /**
  * An object that collects new values incrementally.
  *
- * @author netflixoss 
+ * @author netflixoss
  * @version $Revision: $
  */
 public interface DataCollector {

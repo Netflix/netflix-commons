@@ -17,7 +17,6 @@
 */
 package com.netflix.stats.distribution;
 
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -101,26 +100,14 @@ public class Histogram extends Distribution implements HistogramMBean {
     }
 
     private int findBucket(double val) {
-        if (false) {
-            // Use binary search -- complicated by final catch-all bucket
-            int idx = Arrays.binarySearch(bucketLimits, val);
-            if (idx < 0) {
-                // returned value is (-(insertion point) - 1)
-                return -(idx + 1);
-            } else {
-                // Found exact match, which means use *next* bucket
-                return (idx + 1);
+        // linear scan should be fast enough
+        for (int i = 0; i < getNumBuckets(); i++) {
+            if (val < getBucketMaximum(i)) {
+                return i;
             }
-        } else {
-            // linear scan should be fast enough
-            for (int i = 0; i < getNumBuckets(); i++) {
-                if (val < getBucketMaximum(i)) {
-                    return i;
-                }
-            }
-            // fall through if must use final catch-all bucket
-            return getNumBuckets() - 1;
         }
+        // fall through if must use final catch-all bucket
+        return getNumBuckets() - 1;
     }
 
     private void updateBucket(double val, int idx) {
@@ -319,7 +306,7 @@ public class Histogram extends Distribution implements HistogramMBean {
         assert min <= value;
         assert value < max;
         if (count == 0) {
-            // bad edge case -- just leave index alone
+            count = 0; // bad edge case -- just leave index alone (code in plae to suppress findbugs)
         } else if (bucket < lastBucket) {
             idx += count * (value - min) / (max - min);
         } else {

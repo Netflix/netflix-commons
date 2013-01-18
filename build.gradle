@@ -30,4 +30,7 @@ project(':netflix-commons-util') {
 }
 
 project(':netflix-statistics') {
+    dependencies {
+        compile 'com.google.code.findbugs:annotations:1.3+'
+    }
 }

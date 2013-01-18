@@ -25,7 +25,7 @@ import java.util.Date;
  * This implements {@link DataDistributionMBean}
  * and so can be registered as an MBean and accessed via JMX if desired.
  *
- * @author netflixoss 
+ * @author netflixoss
  * @version $Revision: $
  */
 public class DataDistribution extends DataAccumulator implements DataDistributionMBean {
