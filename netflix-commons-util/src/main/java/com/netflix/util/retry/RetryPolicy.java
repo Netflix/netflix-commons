@@ -1,22 +1,20 @@
 package com.netflix.util.retry;
 
-import java.util.concurrent.Callable;
-
 /**
- * Abstraction for a retry policy around a Callable.  
+ * Abstraction for a RetryPolicy that determines the number of retries and backoff
+ * amount based on the number of retry attempts and elapsed time since an 
+ * operation was started.
  * 
  * @author elandau
  */
 public interface RetryPolicy {
     /**
-     * Wrap a Callable with retry logic.  Calling call() on the returned Callable
-     * will execute the original Callable with retries.  The retry policy will
-     * attempt to retry on any exception, except for NotRetryableException and
-     * InterruptedException which should be thrown by the original callback to 
-     * force exiting the retry loop.
+     * Implement the retry policy logic based on the provided number of attempts 
+     * and elapsed time.
      * 
-     * @param callable
+     * @param attempt
+     * @param elapsedMillis
      * @return
      */
-    public <R> Callable<R> wrap(Callable<R> callable);
+    public long nextBackoffDelay(int attempt, long elapsedMillis);
 }

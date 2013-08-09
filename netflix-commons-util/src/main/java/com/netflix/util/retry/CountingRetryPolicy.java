@@ -15,8 +15,6 @@
  ******************************************************************************/
 package com.netflix.util.retry;
 
-import java.util.concurrent.Callable;
-
 /**
  * Retry an operation N times without waiting.
  * 
@@ -31,36 +29,9 @@ public class CountingRetryPolicy implements RetryPolicy {
     }
 
     @Override
-    public <R> Callable<R> wrap(final Callable<R> callable) {
-        return new Callable<R>() {
-            @Override
-            public R call() throws Exception {
-                Exception lastException = null;
-                for (int i = 0; i < maxAttemptCount; i++) {
-                    try {
-                        return callable.call();
-                    }
-                    catch (InterruptedException e) {
-                        throw e;
-                    }
-                    catch (Exception e) {
-                        if (e instanceof NotRetryableException)
-                            throw e;
-                        try {
-                            backoff(i);
-                        }
-                        catch (Exception e2) {
-                            throw e2;
-                        }
-                        lastException = e;
-                    }
-                }
-                throw lastException;
-            }
-        };
-    }
-    
-    protected void backoff(int attempt) throws InterruptedException {
-        
+    public long nextBackoffDelay(int attempt, long elapsedMillis) {
+        if (attempt >= maxAttemptCount)
+            return -1;
+        return 0;
     }
 }

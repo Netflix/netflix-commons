@@ -15,39 +15,26 @@
  ******************************************************************************/
 package com.netflix.util.retry;
 
-import java.util.Random;
-
 /**
- * Bounded exponential backoff that will wait for no more than a provided max amount of time.
- * 
- * The following examples show the maximum wait time for each attempt
- *  ExponentalBackoff(250, 10) 
- *      250 500 1000 2000 4000 8000 16000 32000 64000 128000
- *  
- *  BoundedExponentialBackoff(250, 5000, 10) 
- *      250 500 1000 2000 4000 5000 5000 5000 5000 5000
+ * Bounded exponential backoff that will wait for no more than a max amount of time.
  * 
  * @author elandau
  *
  */
-public class BoundedExponentialBackoffRetryPolicy extends CountingRetryPolicy {
-    private final int MAX_SHIFT = 30;
+public class BoundedExponentialBackoffRetryPolicy extends ExponentialBackoffRetryPolicy {
+    private final long maxDelay;
     
-    private final static Random random = new Random();
-    private final long interval;
-    private final long maxInterval;
-    
-    public BoundedExponentialBackoffRetryPolicy(long interval, long maxInterval, int maxAttempts) {
-        super(maxAttempts);
-        this.interval = interval;
-        this.maxInterval = maxInterval;
+    public BoundedExponentialBackoffRetryPolicy(long interval, long maxDelay, int maxAttempts) {
+        super(interval, maxAttempts);
+        this.maxDelay = maxDelay;
     }
 
-    protected void backoff(int attempt) throws InterruptedException {
-        if (attempt > MAX_SHIFT) {
-            attempt = MAX_SHIFT;
-        }
-        
-        Thread.sleep(Math.min(maxInterval,  interval * Math.max(1, random.nextInt(1 << attempt))));
+    @Override
+    public long nextBackoffDelay(int attempt, long elapsedMillis) {
+        long delay = super.nextBackoffDelay(attempt, elapsedMillis);
+        if (delay == -1)
+            return -1;
+            
+        return Math.min(delay, maxDelay);
     }
 }

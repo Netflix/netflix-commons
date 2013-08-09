@@ -95,7 +95,7 @@ public class TimeAndSizeBatchingPolicy implements BatchingPolicy {
             private void consumeEntries() throws Exception {
                 long expiration = -1;
                 
-                while (!Thread.interrupted()) {
+                while (!Thread.currentThread().isInterrupted()) {
                     Entry<T> entry;
                     if (expiration == -1) {
                         entry = queue.take();

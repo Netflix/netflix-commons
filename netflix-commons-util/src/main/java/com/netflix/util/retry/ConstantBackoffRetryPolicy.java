@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.netflix.util.retry;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Retry policy with constant wait time between attempts.
  * 
@@ -23,15 +25,23 @@ package com.netflix.util.retry;
  */
 public class ConstantBackoffRetryPolicy extends CountingRetryPolicy {
 
-    private final int sleepTimeMs;
+    private final long delay;
 
-    public ConstantBackoffRetryPolicy(int sleepTimeMs, int maxAttemptCount) {
+    public ConstantBackoffRetryPolicy(int maxAttemptCount, long delay) {
         super(maxAttemptCount);
-        this.sleepTimeMs = sleepTimeMs;
+        this.delay = delay;
     }
 
-    protected void backoff(int attempt) throws InterruptedException {
-        Thread.sleep(sleepTimeMs);
+    public ConstantBackoffRetryPolicy(int maxAttemptCount, long delay, TimeUnit units) {
+        this(maxAttemptCount, units.toMillis(delay));
     }
-    
+
+    @Override
+    public long nextBackoffDelay(int attempt, long elapsedMillis) {
+        if (super.nextBackoffDelay(attempt, elapsedMillis) == -1)
+            return -1;
+        
+        System.out.println("Attempt " + attempt);
+        return delay;
+    }
 }

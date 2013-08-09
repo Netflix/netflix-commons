@@ -35,11 +35,20 @@ public class ExponentialBackoffRetryPolicy extends CountingRetryPolicy {
         this.interval = interval;
     }
 
-    protected void backoff(int attempt) throws InterruptedException {
+    @Override
+    public long nextBackoffDelay(int attempt, long elapsedMillis) {
+        if (super.nextBackoffDelay(attempt, elapsedMillis) == -1)
+            return -1;
+        
+        // Avoid int overflow.  
         if (attempt > MAX_SHIFT) {
             attempt = MAX_SHIFT;
         }
         
-        Thread.sleep(interval * Math.max(1, random.nextInt(1 << attempt)));
+        // Determine a random number of internals up to 2^attempt
+        int exp = random.nextInt(1 << attempt);
+        
+        // Return actual time based on interval
+        return interval * exp;
     }
 }
