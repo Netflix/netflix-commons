@@ -1,0 +1,34 @@
+package com.netflix.util.batch;
+
+import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+
+/**
+ * Batching strategy that makes an inline call to the callback for every insert.
+ * The call contains a list of 1 element and therefore does no batching at all.
+ * 
+ * @author elandau
+ */
+public class InlineNoBatchPolicy implements BatchingPolicy {
+    @Override
+    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback) {
+        return new Batcher<T>() {
+            @Override
+            public void add(T object) {
+                callback.apply(ImmutableList.of(object));
+            }
+
+            @Override
+            public void flush() {
+                // Nothing to flush here
+            }
+
+            @Override
+            public void shutdown() {
+                // Nothing to do here
+            }
+        };
+    }
+}

@@ -1,0 +1,46 @@
+<body>
+
+<p>
+This package contains a number of classes that produce statistics
+about on-the-fly accumulated data.
+Their primary use-case is collecting information about the distribution
+of API call response times.
+There are a few variations, with differing capabilities and
+memory and run-time costs.
+These classes all implement the {@link com.netflix.stats.distribution.DataCollector}
+interface for adding new data,
+so that code that generates data need not know about the particular data collection implementation.
+
+<ul>
+
+<li>
+The {@link com.netflix.stats.distribution.Distribution} class is the lightest
+weight {@code DataCollector}.
+It reports basic information about the collected data,
+but gives no view into the <i>shape</i> of the distribution of that data.
+The reported information is updated and is available immediately.
+
+<li>
+The {@link com.netflix.stats.distribution.Histogram} class is slightly more expensive:
+It maintains counts of values in pre-defined ranges.
+This gives more information, but requires the user to have some idea of the proper ranges.
+Like the {@code Distribution}, reported information is updated and is available immediately.
+
+
+<li>
+The class {@link com.netflix.stats.distribution.DataDistribution} implements a
+<a href='http://en.wikipedia.org/wiki/Double_buffering'>double buffering</a> scheme to
+support simultaneous accumulation of new data and analysis of the previous buffered data.
+This provides accurate percentile data without prior knowledge of the distribution of data,
+but requires more memory than the other collection types.
+Also, reports are generated when the buffers are swapped, and so are not immediately available.
+The class {@link com.netflix.stats.distribution.DataPublisher} manages a background
+task that periodically swaps the data buffers and publishes the now "previous" data
+into a {@link com.netflix.stats.distribution.DataDistribution} object.
+
+</ul>
+
+<p>
+These classes all implement MBean interfaces, and so can be viewed via JMX.
+
+</body>
