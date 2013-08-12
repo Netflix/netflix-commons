@@ -34,6 +34,14 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
         }
     }
     
+    public class EntryToEntityFunction<T> implements Function<Entry<T>, T> {
+        @Override
+        public T apply(Entry<T> input) {
+            return input.entity;
+        }
+    }
+
+
     private final int    batchSize;
     private final long   maxDelay;
     private final ExecutorService sharedExecutor;
@@ -54,7 +62,7 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
             private final ExecutorService              executor;
             private final BlockingQueue<Entry<T>>      queue;
             private       List<Entry<T>>               batch;
-    
+            
             {
                 Preconditions.checkArgument(batchSize > 1, "Batch size must be > 1");
                 Preconditions.checkArgument(maxDelay  > 0, "Delay must be > 1");
@@ -131,12 +139,7 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
                                 expiration = -1;
                                 
                                 try {
-                                    callback.apply(Lists.newArrayList(Collections2.transform(batch, new Function<Entry<T>, T>() {
-                                        @Override
-                                        public T apply(Entry<T> input) {
-                                            return input.entity;
-                                        }
-                                    })));
+                                    callback.apply(Lists.newArrayList(Collections2.transform(batch, new EntryToEntityFunction<T>())));
                                 }
                                 catch (Throwable t) {
                                     // TOOD: Pass to an exception handler
@@ -158,6 +161,11 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
             @Override
             public void shutdown() {
                 executor.shutdown();
+            }
+
+            @Override
+            public void add(List<T> batch) {
+                callback.apply(batch);
             }
         };
     }

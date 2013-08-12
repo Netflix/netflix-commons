@@ -140,6 +140,11 @@ public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
             public void shutdown() {
                 executor.shutdown();
             }
+
+            @Override
+            public void add(List<T> batch) {
+                callback.apply(batch);
+            }
         };
     }
 }

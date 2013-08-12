@@ -29,6 +29,11 @@ public class InlineNoBatchPolicy implements BatchingPolicy {
             public void shutdown() {
                 // Nothing to do here
             }
+
+            @Override
+            public void add(List<T> batch) {
+                callback.apply(batch);
+            }
         };
     }
 }
