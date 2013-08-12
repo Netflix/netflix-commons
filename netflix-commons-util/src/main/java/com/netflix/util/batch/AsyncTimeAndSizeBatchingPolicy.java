@@ -22,7 +22,7 @@ import com.netflix.util.concurrent.UnownedExecutorService;
  * 
  * @author elandau
  */
-public class TimeAndSizeBatchingPolicy implements BatchingPolicy {
+public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
 
     public static class Entry<T> {
         long expiration;
@@ -38,11 +38,11 @@ public class TimeAndSizeBatchingPolicy implements BatchingPolicy {
     private final long   maxDelay;
     private final ExecutorService sharedExecutor;
     
-    public TimeAndSizeBatchingPolicy(int batchSize, long maxDelay, TimeUnit units) {
+    public AsyncTimeAndSizeBatchingPolicy(int batchSize, long maxDelay, TimeUnit units) {
         this(batchSize, maxDelay, units, null);
     }
 
-    public TimeAndSizeBatchingPolicy(int batchSize, long maxDelay, TimeUnit units, ExecutorService sharedExecutor) {
+    public AsyncTimeAndSizeBatchingPolicy(int batchSize, long maxDelay, TimeUnit units, ExecutorService sharedExecutor) {
         this.maxDelay   = TimeUnit.NANOSECONDS.convert(maxDelay, units);
         this.batchSize  = batchSize;
         this.sharedExecutor = sharedExecutor;

@@ -9,14 +9,14 @@ import org.junit.Test;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.netflix.util.batch.TimeAndSizeBatchingPolicy;
+import com.netflix.util.batch.AsyncTimeAndSizeBatchingPolicy;
 
-public class TimeAndSizeBatcherTest {
+public class AsyncTimeAndSizeBatcherTest {
     @Test
     public void testBySize() throws Exception {
         final List<String> result = Lists.newArrayList();
         
-        BatchingPolicy policy = new TimeAndSizeBatchingPolicy(2, 1, TimeUnit.SECONDS);
+        BatchingPolicy policy = new AsyncTimeAndSizeBatchingPolicy(2, 1, TimeUnit.SECONDS);
         Batcher<String> batcher = policy.create(new Function<List<String>, Boolean>() {
             public Boolean apply(List<String> list) {
                 result.addAll(list);
@@ -36,7 +36,7 @@ public class TimeAndSizeBatcherTest {
     public void testByTime() throws Exception {
         final List<String> result = Lists.newArrayList();
         
-        BatchingPolicy policy = new TimeAndSizeBatchingPolicy(10, 1, TimeUnit.SECONDS);
+        BatchingPolicy policy = new AsyncTimeAndSizeBatchingPolicy(10, 1, TimeUnit.SECONDS);
         Batcher<String> batcher = policy.create(new Function<List<String>, Boolean>() {
             public Boolean apply(List<String> list) {
                 result.addAll(list);
@@ -49,14 +49,13 @@ public class TimeAndSizeBatcherTest {
         
         Assert.assertEquals(0, result.size());
         
-        Thread.sleep(2010);
+        Thread.sleep(2010); // Wait until after the batch delay has passed
         
         Assert.assertEquals(2, result.size());
     }
     
-    @Test
     public void testStress() throws Exception {
-        BatchingPolicy policy = new TimeAndSizeBatchingPolicy(10, 100, TimeUnit.MILLISECONDS);
+        BatchingPolicy policy = new AsyncTimeAndSizeBatchingPolicy(10, 100, TimeUnit.MILLISECONDS);
         Batcher<String> batcher = policy.create(new Function<List<String>, Boolean>() {
             public Boolean apply(List<String> list) {
                 System.out.println(list);

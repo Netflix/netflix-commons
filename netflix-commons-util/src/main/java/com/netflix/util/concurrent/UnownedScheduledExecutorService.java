@@ -1,16 +1,15 @@
 package com.netflix.util.concurrent;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.ForwardingExecutorService;
 
-public class UnownedExecutorService extends ForwardingExecutorService {
-    private final ExecutorService delegate;
+public class UnownedScheduledExecutorService extends ForwardingScheduledExecutorService {
+    private final ScheduledExecutorService delegate;
     
-    public UnownedExecutorService(ExecutorService delegate) {
+    public UnownedScheduledExecutorService(ScheduledExecutorService delegate) {
         this.delegate = delegate;
     }
     
@@ -20,7 +19,7 @@ public class UnownedExecutorService extends ForwardingExecutorService {
     }
     
     @Override
-    protected ExecutorService delegate() {
+    protected ScheduledExecutorService delegate() {
         return delegate;
     }
 
@@ -31,5 +30,4 @@ public class UnownedExecutorService extends ForwardingExecutorService {
     public List<Runnable> shutdownNow() {
         return ImmutableList.of();
     }
-
 }
