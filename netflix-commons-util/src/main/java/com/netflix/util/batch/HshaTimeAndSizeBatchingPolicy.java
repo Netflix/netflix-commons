@@ -24,6 +24,28 @@ import com.netflix.util.concurrent.UnownedScheduledExecutorService;
  */
 public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
 
+    public static final int DEFAULT_BATCH_SIZE          = 10;
+    public static final int DEFAULT_FLUSH_PERIOD_MILLIS = 1000;
+    
+    public static class Builder {
+        private int batchSize   = DEFAULT_BATCH_SIZE;
+        private int flushPeriod = DEFAULT_FLUSH_PERIOD_MILLIS;
+        
+        public Builder withBatchSize(int batchSize) {
+            this.batchSize = batchSize;
+            return this;
+        }
+        
+        public Builder withFlushPeriod(int flushPeriod) {
+            this.flushPeriod = flushPeriod;
+            return this;
+        }
+        
+        public HshaTimeAndSizeBatchingPolicy build() {
+            return new HshaTimeAndSizeBatchingPolicy(batchSize, flushPeriod, TimeUnit.MILLISECONDS);
+        }
+    }
+    
     /**
      * Call the callback once the batch has batchSizes elements
      */

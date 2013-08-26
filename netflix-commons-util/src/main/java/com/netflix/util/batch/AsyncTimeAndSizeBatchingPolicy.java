@@ -41,7 +41,6 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
         }
     }
 
-
     private final int    batchSize;
     private final long   maxDelay;
     private final ExecutorService sharedExecutor;

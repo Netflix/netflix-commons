@@ -23,18 +23,18 @@ package com.netflix.util.retry;
  */
 public class BoundedExponentialBackoffRetryPolicy extends ExponentialBackoffRetryPolicy {
     private final long maxDelay;
-    
+
     public BoundedExponentialBackoffRetryPolicy(long interval, long maxDelay, int maxAttempts) {
         super(interval, maxAttempts);
         this.maxDelay = maxDelay;
     }
 
     @Override
-    public long nextBackoffDelay(int attempt, long elapsedMillis) {
-        long delay = super.nextBackoffDelay(attempt, elapsedMillis);
+    protected long getBackoffDelay(Context context) {
+        long delay = super.getBackoffDelay(context);
         if (delay == -1)
             return -1;
-            
+        
         return Math.min(delay, maxDelay);
     }
 }

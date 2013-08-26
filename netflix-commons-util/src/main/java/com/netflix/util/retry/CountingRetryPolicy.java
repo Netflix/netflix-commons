@@ -21,16 +21,20 @@ package com.netflix.util.retry;
  * @author elandau
  *
  */
-public class CountingRetryPolicy implements RetryPolicy {
+public class CountingRetryPolicy extends AbstractRetryPolicy {
     private final int maxAttemptCount;
 
     public CountingRetryPolicy(int maxAttemptCount) {
         this.maxAttemptCount = maxAttemptCount;
     }
 
+    public int getMaxAttemptCount() {
+        return this.maxAttemptCount;
+    }
+
     @Override
-    public long nextBackoffDelay(int attempt, long elapsedMillis) {
-        if (attempt >= maxAttemptCount)
+    protected long getBackoffDelay(Context context) {
+        if (context.getAttemptCount() >= maxAttemptCount)
             return -1;
         return 0;
     }

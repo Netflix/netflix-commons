@@ -22,13 +22,13 @@ public class TestRetryPolicy {
         CountingRetryPolicy policy = new CountingRetryPolicy(5);
         
         final AtomicInteger counter = new AtomicInteger();
-        ListenableFuture<Integer> future = Retryables.execute(new Callable<Integer>() {
+        ListenableFuture<Integer> future = policy.submit(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception {
                 counter.incrementAndGet();
                 throw new RuntimeException("Blah blah");
             }
-        }, policy, executor);
+        }, executor);
         
         try {
             int result = future.get();
@@ -46,13 +46,13 @@ public class TestRetryPolicy {
         ConstantBackoffRetryPolicy policy = new ConstantBackoffRetryPolicy(5, 10, TimeUnit.SECONDS);
         
         final AtomicInteger counter = new AtomicInteger();
-        ListenableFuture<Integer> future = Retryables.execute(new Callable<Integer>() {
+        ListenableFuture<Integer> future = policy.submit(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception {
                 counter.incrementAndGet();
                 throw new RuntimeException("Blah blah");
             }
-        }, policy, executor);
+        },  executor);
         
         try {
             future.cancel(true);
@@ -73,13 +73,13 @@ public class TestRetryPolicy {
         ConstantBackoffRetryPolicy policy = new ConstantBackoffRetryPolicy(5, 100, TimeUnit.MILLISECONDS);
         
         final AtomicInteger counter = new AtomicInteger();
-        ListenableFuture<Integer> future = Retryables.execute(new Callable<Integer>() {
+        ListenableFuture<Integer> future = policy.submit(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception {
                 counter.incrementAndGet();
                 throw new RuntimeException("Blah blah");
             }
-        }, policy, executor);
+        }, executor);
         
         Stopwatch sw = new Stopwatch().start();
         try {

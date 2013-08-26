@@ -36,14 +36,12 @@ public class ExponentialBackoffRetryPolicy extends CountingRetryPolicy {
     }
 
     @Override
-    public long nextBackoffDelay(int attempt, long elapsedMillis) {
-        if (super.nextBackoffDelay(attempt, elapsedMillis) == -1)
+    protected long getBackoffDelay(Context context) {
+        if (super.getBackoffDelay(context) == -1)
             return -1;
         
         // Avoid int overflow.  
-        if (attempt > MAX_SHIFT) {
-            attempt = MAX_SHIFT;
-        }
+        int attempt = (int) Math.min(MAX_SHIFT, context.getAttemptCount());
         
         // Determine a random number of internals up to 2^attempt
         int exp = random.nextInt(1 << attempt);

@@ -12,6 +12,13 @@ import com.google.common.collect.ImmutableList;
  * @author elandau
  */
 public class InlineNoBatchPolicy implements BatchingPolicy {
+    
+    public static class Builder {
+        public InlineNoBatchPolicy build() {
+            return new InlineNoBatchPolicy();
+        }
+    }
+    
     @Override
     public <T> Batcher<T> create(final Function<List<T>, Boolean> callback) {
         return new Batcher<T>() {

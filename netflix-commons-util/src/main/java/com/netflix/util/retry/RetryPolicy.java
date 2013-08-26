@@ -1,5 +1,9 @@
 package com.netflix.util.retry;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledExecutorService;
+import com.google.common.util.concurrent.ListenableFuture;
+
 /**
  * Abstraction for a RetryPolicy that determines the number of retries and backoff
  * amount based on the number of retry attempts and elapsed time since an 
@@ -10,12 +14,12 @@ package com.netflix.util.retry;
  */
 public interface RetryPolicy {
     /**
-     * Implement the retry policy logic based on the provided number of attempts 
-     * and elapsed time.
+     * Execute the callable in the caller thread's contxt but enqueue any retries
+     * to the provided executor.
      * 
-     * @param attempt
-     * @param elapsedMillis
+     * @param callable
+     * @param executor
      * @return
      */
-    public long nextBackoffDelay(int attempt, long elapsedMillis);
+    public <R> ListenableFuture<R> submit(Callable<R> callable, ScheduledExecutorService executor);
 }

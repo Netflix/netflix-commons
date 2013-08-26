@@ -35,13 +35,10 @@ public class ConstantBackoffRetryPolicy extends CountingRetryPolicy {
     public ConstantBackoffRetryPolicy(int maxAttemptCount, long delay, TimeUnit units) {
         this(maxAttemptCount, units.toMillis(delay));
     }
-
-    @Override
-    public long nextBackoffDelay(int attempt, long elapsedMillis) {
-        if (super.nextBackoffDelay(attempt, elapsedMillis) == -1)
+    
+    protected long getBackoffDelay(Context context) {
+        if (super.getBackoffDelay(context) == -1)
             return -1;
-        
-        System.out.println("Attempt " + attempt);
         return delay;
     }
 }
