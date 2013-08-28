@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Function;
@@ -12,9 +11,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
-import com.netflix.util.concurrent.UnownedExecutorService;
 
 /**
  * Batching strategy using a single queue and thread to batch up to N messages
@@ -43,22 +39,15 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
 
     private final int    batchSize;
     private final long   maxDelay;
-    private final ExecutorService sharedExecutor;
     
     public AsyncTimeAndSizeBatchingPolicy(int batchSize, long maxDelay, TimeUnit units) {
-        this(batchSize, maxDelay, units, null);
-    }
-
-    public AsyncTimeAndSizeBatchingPolicy(int batchSize, long maxDelay, TimeUnit units, ExecutorService sharedExecutor) {
         this.maxDelay   = TimeUnit.NANOSECONDS.convert(maxDelay, units);
         this.batchSize  = batchSize;
-        this.sharedExecutor = sharedExecutor;
     }
 
     @Override
-    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback) {
+    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback, final ExecutorService executor) {
         return new Batcher<T>() {
-            private final ExecutorService              executor;
             private final BlockingQueue<Entry<T>>      queue;
             private       List<Entry<T>>               batch;
             
@@ -68,17 +57,6 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
                 
                 this.queue      = Queues.newLinkedBlockingDeque();
                 this.batch      = Lists.newArrayList();
-                
-                if (sharedExecutor == null) {
-                    executor = Executors.newSingleThreadScheduledExecutor(
-                            new ThreadFactoryBuilder()
-                            .setDaemon(true)
-                            .setNameFormat("Batcher-%d")
-                            .build());
-                }
-                else {
-                    executor = new UnownedExecutorService(sharedExecutor);
-                }
                 
                 executor.submit(new Callable<Boolean>() {
                     @Override
@@ -138,13 +116,19 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
                                 expiration = -1;
                                 
                                 try {
-                                    callback.apply(Lists.newArrayList(Collections2.transform(batch, new EntryToEntityFunction<T>())));
+                                    final List<T> batchToProcess = Lists.newArrayList(Collections2.transform(batch, new EntryToEntityFunction<T>()));
+                                    batch.clear();
+                                    executor.submit(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            callback.apply(batchToProcess);
+                                        }
+                                    });
                                 }
                                 catch (Throwable t) {
-                                    // TOOD: Pass to an exception handler
                                     t.printStackTrace();
+                                    // TODO:
                                 }
-                                batch.clear();
                             }
                             else if (batch.size() == 1) {
                                 expiration = batch.get(0).expiration;
@@ -157,11 +141,6 @@ public class AsyncTimeAndSizeBatchingPolicy implements BatchingPolicy {
                 }
             }
     
-            @Override
-            public void shutdown() {
-                executor.shutdown();
-            }
-
             @Override
             public void add(List<T> batch) {
                 callback.apply(batch);

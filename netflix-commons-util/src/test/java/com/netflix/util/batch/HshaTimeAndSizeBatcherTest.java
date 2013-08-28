@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
+import com.netflix.util.concurrent.NoThreadExecutorService;
 
 public class HshaTimeAndSizeBatcherTest {
     @Test
@@ -23,12 +24,11 @@ public class HshaTimeAndSizeBatcherTest {
                 result.addAll(list);
                 return true;
             }
-        });
+        }, new NoThreadExecutorService());
         
         batcher.add("A");
         batcher.add("B");
         Thread.sleep(100);
-        batcher.shutdown();
      
         Assert.assertEquals(2, result.size());
     }
@@ -43,7 +43,7 @@ public class HshaTimeAndSizeBatcherTest {
                 result.addAll(list);
                 return true;
             }
-        });
+        }, new NoThreadExecutorService());
         
         batcher.add("A");
         batcher.add("B");
@@ -59,7 +59,7 @@ public class HshaTimeAndSizeBatcherTest {
     public void testByTimeWithBlockingQueue() throws Exception {
         BlockingQueue<List<String>> queue = Queues.newLinkedBlockingQueue();
         BatchingPolicy policy = new HshaTimeAndSizeBatchingPolicy(10, 1, TimeUnit.SECONDS);
-        Batcher<String> batcher = policy.create(BatchToQueueFunction.wrap(queue));
+        Batcher<String> batcher = policy.create(BatchToQueueFunction.wrap(queue), new NoThreadExecutorService());
         
         batcher.add("A");
         batcher.add("B");

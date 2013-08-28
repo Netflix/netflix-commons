@@ -1,6 +1,7 @@
 package com.netflix.util.batch;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -20,7 +21,7 @@ public class InlineNoBatchPolicy implements BatchingPolicy {
     }
     
     @Override
-    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback) {
+    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback, ExecutorService executor) {
         return new Batcher<T>() {
             @Override
             public void add(T object) {
@@ -30,11 +31,6 @@ public class InlineNoBatchPolicy implements BatchingPolicy {
             @Override
             public void flush() {
                 // Nothing to flush here
-            }
-
-            @Override
-            public void shutdown() {
-                // Nothing to do here
             }
 
             @Override

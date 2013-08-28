@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.netflix.util.batch.AsyncTimeAndSizeBatchingPolicy;
+import com.netflix.util.concurrent.NoThreadExecutorService;
 
 public class AsyncTimeAndSizeBatcherTest {
     @Test
@@ -22,12 +23,11 @@ public class AsyncTimeAndSizeBatcherTest {
                 result.addAll(list);
                 return true;
             }
-        });
+        }, new NoThreadExecutorService());
         
         batcher.add("A");
         batcher.add("B");
         Thread.sleep(100);
-        batcher.shutdown();
      
         Assert.assertEquals(2, result.size());
     }
@@ -42,7 +42,7 @@ public class AsyncTimeAndSizeBatcherTest {
                 result.addAll(list);
                 return true;
             }
-        });
+        }, new NoThreadExecutorService());
         
         batcher.add("A");
         batcher.add("B");
@@ -61,7 +61,7 @@ public class AsyncTimeAndSizeBatcherTest {
                 System.out.println(list);
                 return true;
             }
-        });
+        }, new NoThreadExecutorService());
         
         for (int i = 0; i < 1000; i++) {
             batcher.add(Integer.toString(i));

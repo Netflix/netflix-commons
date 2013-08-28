@@ -1,6 +1,7 @@
 package com.netflix.util.batch;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import com.google.common.base.Function;
 
@@ -20,5 +21,5 @@ public interface BatchingPolicy {
      * @param callback
      * @return
      */
-    public <T> Batcher<T> create(Function<List<T>, Boolean> callback);
+    public <T> Batcher<T> create(Function<List<T>, Boolean> callback, ExecutorService executor);
 }

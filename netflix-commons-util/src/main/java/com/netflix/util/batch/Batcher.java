@@ -34,9 +34,4 @@ public interface Batcher<T> {
      * Flush any pending objects to the batcher callback regardless of strategy.
      */
     public void flush();
-    
-    /**
-     * Shutdown the batcher, including any running internal threads
-     */
-    public void shutdown();
 }

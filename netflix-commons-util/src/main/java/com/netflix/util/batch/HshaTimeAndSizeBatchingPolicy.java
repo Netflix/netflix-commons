@@ -1,6 +1,7 @@
 package com.netflix.util.batch;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -10,7 +11,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.netflix.util.concurrent.UnownedScheduledExecutorService;
 
 /**
  * Half sync / Half async batching policy which may call the callback either from a caller thread
@@ -59,18 +59,7 @@ public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
     /**
      * Shared executor to be used by all batchers created by the policy
      */
-    private final ScheduledExecutorService sharedExecutor;
-    
-    /**
-     * Construct a policy which will result in a single SchedueldExecutorService
-     * created for each Batcher instance.
-     * @param batchSize
-     * @param flushPeriod
-     * @param units
-     */
-    public HshaTimeAndSizeBatchingPolicy(int batchSize, long flushPeriod, TimeUnit units) {
-        this(batchSize, flushPeriod, units, null);
-    }
+    private final ScheduledExecutorService scheduleExecutor;
     
     /**
      * Construct a policy which will reuse the same ScheduledExecutorService.  Note that
@@ -82,16 +71,19 @@ public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
      * @param units
      * @param sharedExecutor
      */
-    public HshaTimeAndSizeBatchingPolicy(int batchSize, long flushPeriod, TimeUnit units, ScheduledExecutorService sharedExecutor) {
+    public HshaTimeAndSizeBatchingPolicy(int batchSize, long flushPeriod, TimeUnit units) {
         this.flushPeriod       = TimeUnit.MILLISECONDS.convert(flushPeriod, units);
         this.batchSize      = batchSize;
-        this.sharedExecutor = sharedExecutor;
+        this.scheduleExecutor = Executors.newSingleThreadScheduledExecutor(
+                new ThreadFactoryBuilder()
+                .setDaemon(true)
+                .setNameFormat("HshaTimeAndSizeBatchingPolicy-%d")
+                .build());
     }
 
     @Override
-    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback) {
+    public <T> Batcher<T> create(final Function<List<T>, Boolean> callback, final ExecutorService executorService) {
         return new Batcher<T>() {
-            private final ScheduledExecutorService     executor;
             private       List<T>                      batch;
             private final ReentrantLock                lock = new ReentrantLock();
     
@@ -101,18 +93,7 @@ public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
                 
                 this.batch      = Lists.newArrayList();
                 
-                if (sharedExecutor == null) {
-                    executor = Executors.newSingleThreadScheduledExecutor(
-                            new ThreadFactoryBuilder()
-                            .setDaemon(true)
-                            .setNameFormat("Batcher-%d")
-                            .build());
-                }
-                else {
-                    executor = new UnownedScheduledExecutorService(sharedExecutor);
-                }
-                
-                executor.scheduleAtFixedRate(new Runnable() {
+                scheduleExecutor.scheduleAtFixedRate(new Runnable() {
                     @Override
                     public void run() {
                         flush();
@@ -129,12 +110,17 @@ public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
                 // Reached max batch size so pass the batch to the callback
                 if (batch.size() >= batchSize) {
                     // Swap for a new empty batch
-                    List<T> tempBatch = this.batch;
+                    final List<T> tempBatch = this.batch;
                     this.batch = Lists.newArrayListWithCapacity(batchSize);
                     lock.unlock();
                     
                     // Call the batch not under a lock
-                    callback.apply(tempBatch);
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.apply(tempBatch);
+                        }
+                    });
                 }
                 else {
                     lock.unlock();
@@ -146,23 +132,22 @@ public class HshaTimeAndSizeBatchingPolicy implements BatchingPolicy {
                 lock.lock();
                 if (!batch.isEmpty()) {
                     // Swap for a new empty batch
-                    List<T> tempBatch = this.batch;
+                    final List<T> tempBatch = this.batch;
                     this.batch = Lists.newArrayListWithCapacity(batchSize);
                     lock.unlock();
                     
                     // Call the batch not under a lock
-                    callback.apply(tempBatch);
-                }
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.apply(tempBatch);
+                        }
+                    });                }
                 else {
                     lock.unlock();
                 }
             }
     
-            @Override
-            public void shutdown() {
-                executor.shutdown();
-            }
-
             @Override
             public void add(List<T> batch) {
                 callback.apply(batch);
