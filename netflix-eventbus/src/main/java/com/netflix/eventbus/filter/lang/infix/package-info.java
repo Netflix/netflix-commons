@@ -46,4 +46,4 @@
  <br/> Seconds format argument is the input source format.</i></li>
  </ul>
  */
-package com.netflix.eventbus.infix.lang.infix;
+package com.netflix.eventbus.filter.lang.infix;

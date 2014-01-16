@@ -1,10 +1,10 @@
-package com.netflix.eventbus.infix.lang.infix;
+package com.netflix.eventbus.filter.lang.infix;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Predicate;
-import com.netflix.eventbus.infix.lang.FilterLanguageSupport;
-import com.netflix.eventbus.infix.lang.InvalidFilterException;
+import com.netflix.eventbus.filter.lang.FilterLanguageSupport;
+import com.netflix.eventbus.filter.lang.InvalidFilterException;
 import com.netflix.eventbus.spi.EventFilter;
 import com.netflix.infix.InfixCompiler;
 

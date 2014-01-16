@@ -16,9 +16,7 @@ final public class AlwaysTruePredicate implements Predicate<Object> {
 
     @Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("AlwaysTrueEventFilter []");
-		return builder.toString();
+		return "AlwaysTruePredicate []";
 	}
 
 	@Override

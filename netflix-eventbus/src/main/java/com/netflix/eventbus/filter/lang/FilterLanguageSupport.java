@@ -1,4 +1,4 @@
-package com.netflix.eventbus.infix.lang;
+package com.netflix.eventbus.filter.lang;
 
 import com.netflix.eventbus.spi.EventFilter;
 

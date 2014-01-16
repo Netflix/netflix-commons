@@ -1,4 +1,4 @@
-package com.netflix.eventbus.infix.lang;
+package com.netflix.eventbus.filter.lang;
 
 /**
  * A generic exception representing an invalid filter expression.

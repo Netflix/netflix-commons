@@ -1,6 +1,8 @@
-package com.netflix.eventbus.infix.lang.infix;
+package com.netflix.eventbus.filter.lang.infix;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Predicate;
 import com.netflix.eventbus.spi.EventFilter;
@@ -35,4 +37,37 @@ public class InfixEventFilter implements EventFilter {
     public String serialize() {
         return original;
     }
+    
+    @Override
+    public int hashCode() {
+        return original != null ? original.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("InfixEventFilter");
+        sb.append("{input=").append(StringUtils.abbreviate(original, 256));
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        InfixEventFilter that = (InfixEventFilter) o;
+
+        if (predicate != null ? !predicate.equals(that.predicate) : that.predicate != null) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

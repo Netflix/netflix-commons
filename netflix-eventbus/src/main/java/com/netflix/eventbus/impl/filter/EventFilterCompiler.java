@@ -1,11 +1,11 @@
 package com.netflix.eventbus.impl.filter;
 
-import com.netflix.eventbus.infix.lang.FilterLanguageSupport;
-import com.netflix.eventbus.infix.lang.InvalidFilterException;
-import com.netflix.eventbus.infix.lang.infix.InfixFilterLanguageSupport;
+import com.netflix.eventbus.filter.lang.FilterLanguageSupport;
+import com.netflix.eventbus.filter.lang.InvalidFilterException;
+import com.netflix.eventbus.filter.lang.infix.InfixFilterLanguageSupport;
 
 /**
- * A compiler to compile the event filter from a language specified in {@link com.netflix.eventbus.infix.lang} to an
+ * A compiler to compile the event filter from a language specified in {@link com.netflix.eventbus.filter.lang} to an
  * {@link com.netflix.eventbus.spi.EventFilter} for consumption by {@link com.netflix.eventbus.spi.EventBus}
  *
  * @author Nitesh Kant (nkant@netflix.com)
