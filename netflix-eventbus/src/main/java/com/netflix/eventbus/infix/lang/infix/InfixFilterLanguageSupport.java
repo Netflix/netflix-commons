@@ -17,7 +17,7 @@ public class InfixFilterLanguageSupport implements FilterLanguageSupport<String>
     public EventFilter convert(String filter) throws InvalidFilterException {
         try {
             final Predicate<Object> predicate = new InfixCompiler().compile(filter);
-            return new InfixEventFilter(predicate);
+            return new InfixEventFilter(predicate, filter);
         } catch (Exception e) {
             throw new InvalidFilterException("Error compiling filter : " + StringUtils.abbreviate(filter, 100), e, null);
         }
