@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.base.Stopwatch;
@@ -67,6 +68,7 @@ public class TestRetryPolicy {
     }
     
     @Test
+    @Ignore // Flaky test
     public void testWithDelay() {
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         
