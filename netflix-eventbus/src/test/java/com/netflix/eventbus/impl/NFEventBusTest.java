@@ -47,7 +47,7 @@ public class NFEventBusTest {
     @Before
 	public void setUp() throws Exception {
         System.setProperty(SyncSubscribersGatekeeper.ALLOW_SYNC_SUBSCRIBERS, "false");
-        eventBus = new EventBusImpl(null);
+        eventBus = new EventBusImpl();
     }
 
 	@After
@@ -77,7 +77,7 @@ public class NFEventBusTest {
 
     @Test
 	public void testCatchAll() throws InvalidSubscriberException, InterruptedException {
-        eventBus = new EventBusImpl(null);
+        eventBus = new EventBusImpl();
         final TestAwareQueue testAwareQueue = new TestAwareQueue();
 		eventBus.setConsumerQueueSupplier(new EventBusImpl.ConsumerQueueSupplier() {
             @Override

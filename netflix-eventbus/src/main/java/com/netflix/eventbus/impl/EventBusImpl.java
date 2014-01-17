@@ -12,7 +12,6 @@ import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.netflix.config.DynamicIntProperty;
 import com.netflix.config.DynamicPropertyFactory;
-import com.netflix.eventbus.persistence.PersistenceHandler;
 import com.netflix.eventbus.spi.CatchAllSubscriber;
 import com.netflix.eventbus.spi.EventBus;
 import com.netflix.eventbus.spi.EventCreator;
@@ -55,7 +54,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author Nitesh Kant (nkant@netflix.com)
  */
-class EventBusImpl implements EventBus {
+public class EventBusImpl implements EventBus {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventBusImpl.class);
 
@@ -135,14 +134,7 @@ class EventBusImpl implements EventBus {
     private EventConsumer catchAllSubscriber;
     private volatile CatchAllSubscriber catchAllSubInstance;
 
-    EventBusImpl(PersistenceHandler persistenceHandler) {
-        if (persistenceHandler != null)
-            persistenceHandler.start();
-//        PersistenceHandlerProvider.getPersistenceHandler().start();
-        // Since the config update task is a daemon, it does not need an explicit shutdown as such.
-    }
-
-    EventBusImpl() {
+    public EventBusImpl() {
         
     }
 

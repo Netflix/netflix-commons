@@ -18,7 +18,7 @@ public class BatchSubscribersTest {
 
     @Test
     public void testBatch() throws Exception {
-        EventBusImpl bus = new EventBusImpl(null);
+        EventBusImpl bus = new EventBusImpl();
 
         bus.setConsumerQueueSupplier(new EventBusImpl.ConsumerQueueSupplier() {
             @Override

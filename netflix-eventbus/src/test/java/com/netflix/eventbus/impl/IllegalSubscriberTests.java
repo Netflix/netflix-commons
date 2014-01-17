@@ -11,7 +11,7 @@ public class IllegalSubscriberTests {
 
     @Test
     public void testMultiArgumentsSubscriber() throws Exception {
-        EventBusImpl bus = new EventBusImpl(null);
+        EventBusImpl bus = new EventBusImpl();
         Object multiArgSub = new Object() {
 
             @Subscribe
@@ -24,7 +24,7 @@ public class IllegalSubscriberTests {
 
     @Test
     public void testIllegalBatchSubscriber() throws Exception {
-        EventBusImpl bus = new EventBusImpl(null);
+        EventBusImpl bus = new EventBusImpl();
         Object multiArgSub = new Object() {
 
             @Subscribe(batchingStrategy = Subscribe.BatchingStrategy.Age)
@@ -37,7 +37,7 @@ public class IllegalSubscriberTests {
 
     @Test
     public void testNoBatchAgeSubscriber() throws Exception {
-        EventBusImpl bus = new EventBusImpl(null);
+        EventBusImpl bus = new EventBusImpl();
         Object multiArgSub = new Object() {
 
             @Subscribe(batchingStrategy = Subscribe.BatchingStrategy.Age, batchSize = 100)
@@ -50,7 +50,7 @@ public class IllegalSubscriberTests {
 
     @Test
     public void testNoBatchSizeSubscriber() throws Exception {
-        EventBusImpl bus = new EventBusImpl(null);
+        EventBusImpl bus = new EventBusImpl();
         Object multiArgSub = new Object() {
 
             @Subscribe(batchingStrategy = Subscribe.BatchingStrategy.SizeOrAge, batchAge = 100)
