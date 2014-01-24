@@ -174,15 +174,16 @@ public class EventBusUtils {
     }
 
     public static StatsTimer newStatsTimer(String monitorName, long collectionDurationInMillis) {
-        MonitorConfig.Builder monitorConfigBuilder = MonitorConfig.builder(monitorName);
-        StatsConfig.Builder statsConfigBuilder = new StatsConfig.Builder();
-        statsConfigBuilder.withComputeFrequencyMillis(collectionDurationInMillis);
-        statsConfigBuilder.withPublishMean(true);
-        statsConfigBuilder.withPublishMin(true);
-        statsConfigBuilder.withPublishMax(true);
-        statsConfigBuilder.withPublishStdDev(true);
-        statsConfigBuilder.withPublishVariance(true);
-        return new StatsTimer(monitorConfigBuilder.build(), statsConfigBuilder.build());
+        return new StatsTimer(
+                MonitorConfig.builder(monitorName).build(), 
+                new StatsConfig.Builder()
+                    .withComputeFrequencyMillis(collectionDurationInMillis)
+                    .withPublishMean(true)
+                    .withPublishMin(true)
+                    .withPublishMax(true)
+                    .withPublishStdDev(true)
+                    .withPublishVariance(true)
+                    .build());
     }
 
     private static class AnnotationBasedSubscriberConfig implements SubscriberConfigProvider.SubscriberConfig {
