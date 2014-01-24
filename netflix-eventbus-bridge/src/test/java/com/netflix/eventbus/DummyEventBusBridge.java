@@ -22,6 +22,7 @@ public class DummyEventBusBridge extends AbstractEventBusBridge {
         }
         
         public DummyEventBusBridge build() throws Exception {
+            validate();
             return new DummyEventBusBridge(this);
         }
     }
