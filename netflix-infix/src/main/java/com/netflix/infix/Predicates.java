@@ -18,7 +18,6 @@ public class Predicates {
 		return AlwaysFalsePredicate.INSTANCE;
 	}
 	
-	@SafeVarargs
     public static Predicate<Object> or(Predicate<Object>...filters) {
 		return new OrPredicate(filters);
 	}
@@ -27,7 +26,6 @@ public class Predicates {
 		return new OrPredicate(ImmutableList.copyOf(filters));
 	}
 	
-	@SafeVarargs
     public static Predicate<Object> and(Predicate<Object>...filters) {
 		return new AndPredicate(filters);
 	}

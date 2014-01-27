@@ -46,7 +46,8 @@ public class NFEventBusTest {
 
     @Before
 	public void setUp() throws Exception {
-        System.setProperty(SyncSubscribersGatekeeper.ALLOW_SYNC_SUBSCRIBERS, "false");
+        ConcurrentCompositeConfiguration config = (ConcurrentCompositeConfiguration)ConfigurationManager.getConfigInstance();
+        config.setOverrideProperty(SyncSubscribersGatekeeper.ALLOW_SYNC_SUBSCRIBERS, "false");
         eventBus = new EventBusImpl();
     }
 

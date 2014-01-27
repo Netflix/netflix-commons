@@ -1,6 +1,5 @@
 package com.netflix.eventbus;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
