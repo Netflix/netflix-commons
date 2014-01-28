@@ -7,7 +7,6 @@ public class AndPredicate implements Predicate<Object> {
 
 	final private Predicate<Object> andPredicate;
 
-    @SafeVarargs
     public AndPredicate(Predicate<Object>... predicates) {
         this.andPredicate = Predicates.and(predicates);
 	}

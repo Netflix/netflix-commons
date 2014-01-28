@@ -7,7 +7,6 @@ public class OrPredicate implements Predicate<Object> {
 
 	final private Predicate<Object> orPredicate;
 
-	@SafeVarargs
     public OrPredicate(Predicate<Object>... predicates) {
         this.orPredicate = Predicates.or(predicates);
 	}
