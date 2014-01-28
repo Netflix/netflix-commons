@@ -16,7 +16,7 @@ public class DynamicSubConfigTest {
 
     @Test
     public void testDynamicSub() throws Exception {
-        EventBusImpl eventBus = (EventBusImpl) EventBusProvider.getEventBus();
+        EventBusImpl eventBus = new EventBusImpl();
         eventBus.registerSubscriber(new AwesomeSub());
 
         Set<EventConsumer> stringConsumers = eventBus.getEventConsumer(String.class);

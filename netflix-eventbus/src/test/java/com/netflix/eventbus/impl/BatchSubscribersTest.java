@@ -44,7 +44,7 @@ public class BatchSubscribersTest {
     @Test
     public void testNestedGenericsRegistration() throws Exception {
         try {
-            EventBusProvider.getEventBus().registerSubscriber(new NestedGenericsBatchConsumer());
+            new EventBusImpl().registerSubscriber(new NestedGenericsBatchConsumer());
         } catch (InvalidSubscriberException e) {
             throw new AssertionError("Batch Subscriber with nested generic event failed to register.");
         }
@@ -53,7 +53,7 @@ public class BatchSubscribersTest {
     @Test
     public void testNonTypedBatchSub() throws Exception {
         try {
-            EventBusProvider.getEventBus().registerSubscriber(new NoTypeBatchConsumer());
+            new EventBusImpl().registerSubscriber(new NoTypeBatchConsumer());
             throw new AssertionError("Batch Subscriber with no generic type successfully registered.");
         } catch (InvalidSubscriberException e) {
             // expected
