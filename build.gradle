@@ -10,6 +10,10 @@ allprojects {
     repositories { mavenCentral() }
 }
 
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
 apply from: file('gradle/convention.gradle')
 apply from: file('gradle/maven.gradle')
 //apply from: file('gradle/check.gradle')
@@ -63,5 +67,16 @@ project(':netflix-eventbus-bridge') {
 project(':netflix-statistics') {
     dependencies {
         compile 'com.google.code.findbugs:annotations:2.0.0'
+    }
+}
+
+project(':netflix-jersey-guice') {
+    dependencies {
+        compile "com.google.inject:guice:3.0"
+        compile "com.sun.jersey:jersey-core:1.11"
+        compile "com.sun.jersey:jersey-json:1.11"
+        compile "com.sun.jersey:jersey-server:1.11"
+        compile "javax.servlet:servlet-api:2.5"
+        compile 'com.google.code.gson:gson:2.1'
     }
 }
