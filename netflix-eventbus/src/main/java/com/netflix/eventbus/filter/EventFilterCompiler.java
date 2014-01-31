@@ -1,4 +1,4 @@
-package com.netflix.eventbus.impl.filter;
+package com.netflix.eventbus.filter;
 
 import com.netflix.eventbus.filter.lang.FilterLanguageSupport;
 import com.netflix.eventbus.filter.lang.InvalidFilterException;
