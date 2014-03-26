@@ -32,7 +32,7 @@ import javax.ws.rs.ext.Provider;
  * {@code
  *  new AbstractModule() {
  *      void configuration() {
- *          Multibinder<OptionalExceptionMapper> mappers = Multibinder.newSetBinder(binder(), OptionalExceptionMapper.class);
+ *          Multibinder<CustomThrowableExceptionMapper> mappers = Multibinder.newSetBinder(binder(), CustomThrowableExceptionMapper.class);
  *          mappers.addBinding().to(MyCustomExceptionMapper.class);
  *      }
  *  }
