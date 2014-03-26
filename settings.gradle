@@ -1,6 +1,7 @@
 rootProject.name='netflix-commons' 
 include 'netflix-commons-util'
 include 'netflix-statistics'
+include 'netflix-lifecycle'
 include 'netflix-infix'
 include 'netflix-eventbus'
 include 'netflix-eventbus-bridge'
