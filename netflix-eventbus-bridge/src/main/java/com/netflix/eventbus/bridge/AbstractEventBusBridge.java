@@ -9,6 +9,7 @@ import com.google.common.base.Suppliers;
 import com.google.inject.Inject;
 import com.netflix.eventbus.spi.DynamicSubscriber;
 import com.netflix.eventbus.spi.EventBus;
+import com.netflix.eventbus.spi.EventFilter;
 import com.netflix.eventbus.spi.Subscribe;
 
 /**
@@ -39,6 +40,7 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
         protected Class<?> eventType;
         protected Supplier<EventBusBridgeStats> statsSupplier = DEFAULT_STATS_SUPPLIER;
         protected boolean autoStart = DEFAULT_AUTO_START;
+        protected EventFilter filter;
         
         /**
          * The event bus to use
@@ -57,6 +59,15 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
          */
         public T withEventType(Class<?> eventType) {
             this.eventType = eventType;
+            return self();
+        }
+        
+        /**
+         * Predicate used to filter which events may be sent to the sink
+         * @param filter
+         */
+        public T withFilter(EventFilter filter) {
+            this.filter = filter;
             return self();
         }
         
@@ -109,6 +120,7 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
     protected final EventBusBridgeStats stats;
     protected final Class<?>            eventType;
     protected final Object              subscriber;
+    protected final EventFilter         filter;
     protected volatile Boolean          paused = false;
     
     protected AbstractEventBusBridge(Builder<?> init) throws Exception {
@@ -116,6 +128,7 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
         this.stats     = init.statsSupplier.get();
         this.eventType = init.eventType;
         this.paused    = !init.autoStart;
+        this.filter    = init.filter;
         
         this.subscriber = new DynamicSubscriber() {
             @Override
@@ -215,7 +228,10 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
     final public synchronized void resume() throws Exception {
         if (paused == true) {
             preResume();
-            this.eventBus.registerSubscriber(subscriber);        
+            if (filter != null)
+                this.eventBus.registerSubscriber(filter, subscriber);
+            else 
+                this.eventBus.registerSubscriber(subscriber);        
             paused = false;
         }
     }
