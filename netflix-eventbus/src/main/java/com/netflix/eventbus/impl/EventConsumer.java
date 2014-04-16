@@ -1,9 +1,11 @@
 package com.netflix.eventbus.impl;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.netflix.config.DynamicIntProperty;
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.eventbus.spi.EventBus;
@@ -22,6 +24,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.netflix.eventbus.utils.EventBusUtils.isAnEventBatch;
 
@@ -40,6 +45,8 @@ class EventConsumer {
             DynamicPropertyFactory.getInstance().getIntProperty(EventBus.CONSUMER_QUEUE_FULL_RETRY_MAX_PROP_NAME,
                     EventBus.CONSUMER_QUEUE_FULL_RETRY_MAX_DEFAULT);
 
+    private static final AtomicLong threadIdCounter = new AtomicLong();
+    
     private Class<?> targetEventClass;
     private final Method delegateSubscriber;
     private final Object subscriberClassInstance;
@@ -47,8 +54,7 @@ class EventConsumer {
 
     private final EventBusImpl.ConsumerQueueSupplier.ConsumerQueue eventQueue;
 
-    private final EventPoller poller;
-    private final Thread pollerThread;
+    private final ExecutorService executor;
     private final Subscribe.BatchingStrategy batchingStrategy;
 
     private final EventConsumerStats stats;
@@ -62,23 +68,29 @@ class EventConsumer {
         this.subscriberClassInstance = subscriberClassInstance;
         targetEventClass = targetEventType;
 
-        stats = new EventConsumerStats(
-                subscriberClassInstance.getClass().getName() + "_" + delegateSubscriber.getName() + "_" +
-                                       targetEventClass.getName(), EventBusImpl.STATS_COLLECTION_DURATION_MILLIS.get());
+        String consumerName = Joiner.on("_").join(
+                subscriberClassInstance.getClass().getName(),
+                delegateSubscriber.getName(),
+                targetEventClass.getName());
+        stats = new EventConsumerStats(consumerName, EventBusImpl.STATS_COLLECTION_DURATION_MILLIS.get());
         subscriberConfig = EventBusUtils.getSubscriberConfig(subscriber, subscriberClassInstance);
         batchingStrategy = subscriberConfig.getBatchingStrategy();
         eventQueue = queueSupplier.get(delegateSubscriber, subscriberConfig, stats.QUEUE_SIZE_COUNTER);
-        poller = new EventPoller();
-        pollerThread = new Thread(poller);
-        pollerThread.start();
         if (null != filter) {
             filters = new CopyOnWriteArraySet<EventFilter>(Arrays.asList(filter));
         } else {
             filters = new CopyOnWriteArraySet<EventFilter>();
         }
+        executor = Executors.newSingleThreadExecutor(
+                new ThreadFactoryBuilder()
+                    .setDaemon(true)
+                    .setNameFormat(consumerName + "-" + threadIdCounter.incrementAndGet())
+                    .build()
+                );
+        
+        executor.execute(new EventPoller());
     }
 
-    @SuppressWarnings("unchecked")
     void enqueue(Object event) {
         if (SyncSubscribersGatekeeper.isSyncSubscriber(subscriberConfig, event.getClass(), delegateSubscriber.getClass())) {
             LOGGER.debug(String.format("Sending a sync event to subscriber: %s. Set the property %s to false to disable sync consumption.",
@@ -127,7 +139,7 @@ class EventConsumer {
     }
 
     void shutdown() {
-        poller.stop();
+        executor.shutdownNow();
         eventQueue.clear();
         filters.clear();
     }
@@ -228,29 +240,28 @@ class EventConsumer {
 
     private class EventPoller implements Runnable {
 
-        private volatile boolean stop;
-
-        private void stop() {
-            stop = true;
-            pollerThread.interrupt();
-        }
-
         @Override
         public void run() {
             LOGGER.info("Event consumer: " + delegateSubscriber.toGenericString() + " started.");
-            while (!stop) {
-                Object event;
-                try {
-                    event = eventQueue.blockingTake();
-                    if (null != event) {
-                        processEvent(event);
+            try {
+                boolean done = false;
+                while (!done) {
+                    Object event;
+                    try {
+                        event = eventQueue.blockingTake();
+                        if (null != event) {
+                            processEvent(event);
+                        }
+                    } catch (InterruptedException e) {
+                        LOGGER.info("Event consumer: " + delegateSubscriber.toGenericString() +
+                                    " interrupted. Can be the result of a stop call, if so, you will see a 'consumer stopped' log.");
+                        done = true;
                     }
-                } catch (InterruptedException e) {
-                    LOGGER.info("Event consumer: " + delegateSubscriber.toGenericString() +
-                                " interrupted. Can be the result of a stop call, if so, you will see a 'consumer stopped' log.");
                 }
             }
-            LOGGER.info("Event consumer: " + delegateSubscriber.toGenericString() + " stopped.");
+            finally {
+                LOGGER.info("Event consumer: " + delegateSubscriber.toGenericString() + " stopped.");
+            }
         }
     }
 

@@ -3,6 +3,10 @@ package com.netflix.eventbus.bridge;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import rx.Observable;
+import rx.Observable.OnSubscribe;
+import rx.Subscriber;
+
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -170,8 +174,14 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
      * Template method for sending an event
      * @param event
      * @throws Exception
+     * @deprecated Use {@link onNextEvent} instead
      */
+    @Deprecated
     protected abstract void sendEvent(Object event) throws Exception;
+    
+    protected void onNextEvent(Object event) throws Exception {
+        sendEvent(event);
+    }
     
     /**
      * Template method giving the subclass a chance to initialize any connection
@@ -255,5 +265,4 @@ public abstract class AbstractEventBusBridge implements EventBusBridge {
     public EventBusBridgeStats getStats() {
         return new ImmutableEventBusBridgeStats(stats);
     }
-
 }
