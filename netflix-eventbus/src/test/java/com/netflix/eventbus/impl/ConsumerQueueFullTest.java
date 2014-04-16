@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -29,10 +30,9 @@ public class ConsumerQueueFullTest {
             consumer.enqueue("event" + j);
         }
 
-        Assert.assertEquals("Unexpected queue offers ", 8, qSupplier.offers.get());
-        Assert.assertEquals("Unexpected queue blocking takes", 0, qSupplier.blockingTake.get());
+        Assert.assertEquals("Unexpected queue offers ",            8, qSupplier.offers.get());
         Assert.assertEquals("Unexpected queue non blocking takes", 3, qSupplier.nonBlockingTake.get());
-        Assert.assertEquals("Unexpected queue clear", 0, qSupplier.clear.get());
+        Assert.assertEquals("Unexpected queue clear",              0, qSupplier.clear.get());
 
         Assert.assertEquals("Consumer retry stats not correct.", 3,
                 consumer.getStats().QUEUE_OFFER_RETRY_COUNTER.getValue().longValue());
@@ -54,7 +54,6 @@ public class ConsumerQueueFullTest {
         }
 
         Assert.assertEquals("Unexpected queue offers ", 8, qSupplier.offers.get());
-        Assert.assertEquals("Unexpected queue blocking takes", 0, qSupplier.blockingTake.get());
         Assert.assertEquals("Unexpected queue non blocking takes", 5, qSupplier.nonBlockingTake.get());
         Assert.assertEquals("Unexpected queue clear", 0, qSupplier.clear.get());
 
