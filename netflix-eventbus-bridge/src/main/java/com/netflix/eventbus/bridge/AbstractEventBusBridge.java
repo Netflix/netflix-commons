@@ -3,10 +3,6 @@ package com.netflix.eventbus.bridge;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import rx.Observable;
-import rx.Observable.OnSubscribe;
-import rx.Subscriber;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
