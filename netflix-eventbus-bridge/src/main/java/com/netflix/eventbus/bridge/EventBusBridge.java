@@ -24,5 +24,5 @@ public interface EventBusBridge {
      * 
      * No error is thrown if already resumed
      */
-    public void resume() throws Exception;
+    public void resume() throws Exception;    
 }

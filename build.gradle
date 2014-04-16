@@ -70,6 +70,15 @@ project(':netflix-eventbus-bridge') {
     }
 }
 
+project(':netflix-eventbus-rx') {
+    dependencies {
+        compile project(':netflix-eventbus')
+        
+        compile "com.google.inject:guice:3.0"
+        compile "com.netflix.rxjava:rxjava-core:0.17.2"
+    }
+}
+
 project(':netflix-statistics') {
     dependencies {
         compile 'com.google.code.findbugs:annotations:2.0.0'
