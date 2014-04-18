@@ -191,7 +191,7 @@ public class NFEventBusTest {
 		assertFalse("Live event set contains unregistered handler's event",
                 creator.lastLiveEventTypes.contains(Event2.class));
 		assertFalse("Live event set contains event's superclass",
-                creator.lastLiveEventTypes.contains(DummyAnnotatable.class));
+                creator.lastLiveEventTypes.contains(MockAnnotatable.class));
 		assertTrue("Live event set does not contains live event type",
                 creator.lastLiveEventTypes.contains(Event.class));
 
@@ -219,7 +219,7 @@ public class NFEventBusTest {
         bus.publishIffNotDead(creator, Event.class, Event2.class);
 
 		assertEquals("Event creation not called even with handlers", 1, creator.createEventCount.get());
-		assertFalse("Live event set contains event's superclass", creator.lastLiveEventTypes.contains(DummyAnnotatable.class));
+		assertFalse("Live event set contains event's superclass", creator.lastLiveEventTypes.contains(MockAnnotatable.class));
         assertTrue("Live event set does not contains live event type", creator.lastLiveEventTypes.contains(Event2.class));
         assertTrue("Live event set does not contains live event type", creator.lastLiveEventTypes.contains(Event.class));
 
@@ -248,7 +248,7 @@ public class NFEventBusTest {
         bus.publishIffNotDead(creator, Event.class, Event2.class);
 
 		assertEquals("Event creation not called even with handlers", 1, creator.createEventCount.get());
-		assertFalse("Live event set contains event's superclass", creator.lastLiveEventTypes.contains(DummyAnnotatable.class));
+		assertFalse("Live event set contains event's superclass", creator.lastLiveEventTypes.contains(MockAnnotatable.class));
         assertTrue("Live event set does not contains live event type",
                 creator.lastLiveEventTypes.contains(Event2.class));
         assertTrue("Live event set does not contains live event type", creator.lastLiveEventTypes.contains(Event.class));
@@ -529,7 +529,7 @@ public class NFEventBusTest {
 
 		@Subscribe
         @SuppressWarnings("unused")
-		public void handleEvent(DummyAnnotatable event){
+		public void handleEvent(MockAnnotatable event){
 			counterMockAnnotatable.incrementAndGet();
             synchronized (mockReceiveMonitor) {
                 mockReceiveMonitor.notifyAll();
@@ -547,7 +547,7 @@ public class NFEventBusTest {
 
         @Subscribe
         @SuppressWarnings("unused")
-		public void handleEvent(DummyAnnotatable event){
+		public void handleEvent(MockAnnotatable event){
             super.handleEvent(event);
         }
 	}
@@ -556,7 +556,7 @@ public class NFEventBusTest {
 
         @Subscribe(syncIfAllowed = true)
         @SuppressWarnings("unused")
-		public void handleEvent(DummyAnnotatable event){
+		public void handleEvent(MockAnnotatable event){
             super.handleEvent(event);
         }
 	}
@@ -605,7 +605,7 @@ public class NFEventBusTest {
 
 	// This has to be public in order for JXPath to find its instances' properties. The reason is
 	// JXPath considers only public accessors. 
-	public static class Event implements DummyAnnotatable {
+	public static class Event implements MockAnnotatable {
 		private final String name;
 		private final int id;
 		
