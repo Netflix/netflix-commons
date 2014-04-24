@@ -19,7 +19,7 @@ public class AlwaysFalseEventFilter implements EventFilter {
 
     @Override
     public String getLanguage() {
-        return "constant";
+        return "Constant";
     }
 
     @Override

@@ -8,7 +8,7 @@ package com.netflix.infix;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MockRequestTrace implements MockAnnotatable {
+public class MockRequestTrace implements DummyAnnotatable {
     boolean bIsToplevelRequest = false;
     
     public static final String CLIENTINFO_SERVICE_NAME = "service_name";

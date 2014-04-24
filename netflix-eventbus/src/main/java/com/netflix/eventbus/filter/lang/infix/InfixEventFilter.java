@@ -8,7 +8,7 @@ import com.google.common.base.Predicate;
 import com.netflix.eventbus.spi.EventFilter;
 
 public class InfixEventFilter implements EventFilter {
-    public static final String INFIX_LANGUAGE_NAME = "infix";
+    public static final String INFIX_LANGUAGE_NAME = "Infix";
     
     private final Predicate<Object> predicate;
     private final String original;
