@@ -5,7 +5,7 @@ import org.mockito.Mockito;
 import com.google.common.base.Predicate;
 
 public class VerificationUtil {
-	public static final MockAnnotatable DUMMY_INPUT = Mockito.mock(MockAnnotatable.class);
+	public static final DummyAnnotatable DUMMY_INPUT = Mockito.mock(DummyAnnotatable.class);
 
 	private VerificationUtil(){}
 

@@ -13,11 +13,7 @@ import com.netflix.eventbus.spi.Subscribe;
 import com.netflix.eventbus.spi.SubscriberConfigProvider;
 import com.netflix.eventbus.spi.SyncSubscribersGatekeeper;
 import com.netflix.eventbus.test.AnonymousInnerClassConsumerSupplier;
-import com.netflix.infix.MockAnnotatable;
-import com.netflix.infix.NumericValuePredicate;
-import com.netflix.infix.PathValueEventFilter;
-import com.netflix.infix.Predicates;
-import com.netflix.infix.StringValuePredicate;
+import com.netflix.infix.*;
 
 import junit.framework.Assert;
 import org.junit.After;

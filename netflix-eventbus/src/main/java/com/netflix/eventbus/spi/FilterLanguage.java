@@ -8,5 +8,6 @@ package com.netflix.eventbus.spi;
 public enum FilterLanguage {
 
     Infix,
-    UserDefined
+    UserDefined,
+    Constant
 }
