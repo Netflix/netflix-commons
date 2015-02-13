@@ -24,8 +24,8 @@ subprojects {
     group = "com.netflix.${githubProjectName}" // TEMPLATE: Set to organization of project
 
     dependencies {
-        compile 'org.slf4j:slf4j-api:1.6.4'
-        testCompile 'junit:junit:4.10'
+        compile 'org.slf4j:slf4j-api:1.7.10'
+        testCompile 'junit:junit:4.12'
         testCompile 'log4j:log4j:1.2.16'
     }
 }
@@ -35,14 +35,14 @@ project(':netflix-commons-util') {
 
 project(':netflix-lifecycle') {
     dependencies {
-        compile 'com.netflix.governator:governator:1.2.7'
+        compile 'com.netflix.governator:governator:1.3.3'
     }
 }
 
 project(':netflix-infix') {
     dependencies {
         compile 'commons-jxpath:commons-jxpath:1.3'
-        compile 'joda-time:joda-time:2.3'
+        compile 'joda-time:joda-time:2.7'
         compile 'javax.servlet:servlet-api:2.5'
         compile 'org.antlr:antlr-runtime:3.4'
         compile 'com.google.code.findbugs:annotations:2.0.0'
@@ -56,8 +56,8 @@ project(':netflix-eventbus') {
     dependencies {
         compile project(':netflix-infix')
         
-        compile 'com.netflix.servo:servo-core:0.5.3'
-        compile 'com.netflix.archaius:archaius-core:0.3.3'
+        compile 'com.netflix.servo:servo-core:0.8.3'
+        compile 'com.netflix.archaius:archaius-core:0.6.5'
         compile 'org.apache.commons:commons-math:2.2'
     }
 }
