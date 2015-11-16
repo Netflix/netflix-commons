@@ -55,7 +55,6 @@ public abstract class DataAccumulator implements DataCollector {
      */
 
     /** {@inheritDoc} */
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "MDM_WAIT_WITHOUT_TIMEOUT")
     public void noteValue(double val) {
         synchronized (swapLock) {
             Lock l = current.getLock();
@@ -72,7 +71,6 @@ public abstract class DataAccumulator implements DataCollector {
      * Swaps the data collection buffers, and computes statistics
      * about the data collected up til now.
      */
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "MDM_WAIT_WITHOUT_TIMEOUT")
     public void publish() {
         /*
          * Some care is required here to correctly swap the DataBuffers,
