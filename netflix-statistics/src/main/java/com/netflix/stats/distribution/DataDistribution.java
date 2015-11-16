@@ -50,7 +50,6 @@ public class DataDistribution extends DataAccumulator implements DataDistributio
      *    are swapped and new data is published.
      *    The array values must be in the range {@code [0 .. 100]}.
      */
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "EI_EXPOSE_REP2")
     public DataDistribution(int bufferSize, double[] percents) {
         super(bufferSize);
         assert percentsOK(percents);
@@ -155,13 +154,11 @@ public class DataDistribution extends DataAccumulator implements DataDistributio
     }
 
     /** {@inheritDoc} */
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "EI_EXPOSE_REP")
     public double[] getPercents() {
         return percents;
     }
 
     /** {@inheritDoc} */
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "EI_EXPOSE_REP")
     public double[] getPercentiles() {
         return percentiles;
     }
