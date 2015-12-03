@@ -16,7 +16,7 @@
 *
 */
 
-package com.netflix.util;
+package com.netflix.util.concurrent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
