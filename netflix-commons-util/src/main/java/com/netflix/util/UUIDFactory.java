@@ -23,7 +23,7 @@ import java.util.UUID;
 /**
  * Common interface to sources of various versions of UUIDs.
  */
-public interface UuidFactory {
+public interface UUIDFactory {
     /**
      * Generates a new version 4 UUID.
      *

@@ -26,12 +26,12 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Unit tests for the ConcurrentUuidFactory class.
+ * Unit tests for the ConcurrentUUIDFactory class.
  */
-public class ConcurrentUuidFactoryTest {
+public class ConcurrentUUIDFactoryTest {
     @Test
     public void testGenerateRandomUuidVersionAndVariant() throws Exception {
-        final UUID uuid = new ConcurrentUuidFactory().generateRandomUuid();
+        final UUID uuid = new ConcurrentUUIDFactory().generateRandomUuid();
 
         Assert.assertEquals(4, uuid.version());
         Assert.assertEquals(2, uuid.variant());
@@ -41,7 +41,7 @@ public class ConcurrentUuidFactoryTest {
     public void testGenerateRandomUuidNonConstant() throws Exception {
         final int numValues = 1000;
         final Set<UUID> values = new HashSet<>();
-        final ConcurrentUuidFactory factory = new ConcurrentUuidFactory();
+        final ConcurrentUUIDFactory factory = new ConcurrentUUIDFactory();
 
         for (int i = 0; i < numValues; ++i) {
             final UUID newUuid = factory.generateRandomUuid();

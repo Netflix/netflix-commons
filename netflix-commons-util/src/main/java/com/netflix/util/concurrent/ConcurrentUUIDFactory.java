@@ -18,7 +18,7 @@
 
 package com.netflix.util.concurrent;
 
-import com.netflix.util.UuidFactory;
+import com.netflix.util.UUIDFactory;
 
 import javax.inject.Singleton;
 import java.util.Random;
@@ -26,10 +26,10 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * UuidFactory implementation that will perform reasonably when used by multiple threads under load.
+ * UUIDFactory implementation that will perform reasonably when used by multiple threads under load.
  */
 @Singleton
-public class ConcurrentUuidFactory implements UuidFactory {
+public class ConcurrentUUIDFactory implements UUIDFactory {
     @Override
     public UUID generateRandomUuid() {
         final Random rnd = ThreadLocalRandom.current();
