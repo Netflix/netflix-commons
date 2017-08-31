@@ -35,7 +35,7 @@ public class DataPublisher {
 
     private static final String THREAD_NAME = "DataPublisher";
     private static final boolean DAEMON_THREADS = true;
-    private static ScheduledExecutorService sharedExecutor = null;
+    public static ScheduledExecutorService sharedExecutor = null;
 
     private final DataAccumulator accumulator;
     private final long delayMillis;
