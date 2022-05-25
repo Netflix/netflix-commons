@@ -12,7 +12,7 @@ import java.util.Set;
  <li>The method annotated with {@link Subscribe} does not contain one and only one argument.</li>
  <li>The method uses a batching strategy other than {@link com.netflix.eventbus.spi.Subscribe.BatchingStrategy#None} and
  does not have the argument as {@link Iterable}</li>
- <li>If the subscriber uses batching and does not provide a batch size > 1</li>
+ <li>If the subscriber uses batching and does not provide a batch size &gt; 1</li>
  <li>If the subscriber uses batching and does not provide a batch age.</li>
  </ul>
  *

@@ -6,13 +6,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Consumers for {@link EventBus} must annotate their consumer methods with this annotation. <br/>
- * A consumer is asynchronous, however it can choose to batch events consumed at a time using a batching strategy. <br/>
+ * Consumers for {@link EventBus} must annotate their consumer methods with this annotation.
+ *
+ * A consumer is asynchronous, however it can choose to batch events consumed at a time using a batching strategy.
+ *
  * A consumer can indicate if it <b>favors</b> synchronous event consumption, provided, it is allowed in the current
- * environment, by setting the property {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS} to true.<br/>
- * A consumer is always assumed to be thread-safe. <br/>
+ * environment, by setting the property {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS} to true.
+ *
+ * A consumer is always assumed to be thread-safe.
+ *
  * Any method annotated with this must have one and only one argument which is the event object that it is supposed to
- * handle. <br/>
+ * handle.
  *
  * @author Nitesh Kant (nkant@netflix.com)
  */
@@ -88,7 +92,8 @@ public @interface Subscribe {
 
     /**
      * A backdoor in the eventbus to allow synchronous events consumption. This mode is controlled by the property
-     * {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS}, which when set to true, allows registration of synchronous consumers. <br/>
+     * {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS}, which when set to true, allows registration of synchronous consumers.
+     *
      * <b>Setting this property to true, does NOT guarantee synchronous event consumption. It is only available when
      * the property {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS} is set to true at the time of event publishing.</b>
      * If the property is set to <code>false</code> the events will be sent to the consumer asynchronously.

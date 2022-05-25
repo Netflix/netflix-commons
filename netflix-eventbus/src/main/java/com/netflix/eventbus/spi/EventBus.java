@@ -9,7 +9,8 @@ import java.util.concurrent.BlockingQueue;
 /**
  * An event bus for <em>in-process</em> publish-subscribe communication between components.
  * It aids in de-coupling publishers and subscribers and provides a simple way of publishing, filtering and listening
- * to events. <p/>
+ * to events.
+ * 
  * The various facets of the event bus is defined as follows:
  *
  * <h2>Publishers</h2> Publisher of events can publish the events in two modes as follows:
@@ -33,23 +34,23 @@ import java.util.concurrent.BlockingQueue;
  * subscriber requests interest in certain events by providing a method with the annotation
  * {@link Subscribe} and having just one argument, the event object itself.
  *
- * <h6>Event - Subscriber mapping</h6> Any subscriber method taking an event object of Class X as argument is expected
+ * <h3>Event - Subscriber mapping</h3> Any subscriber method taking an event object of Class X as argument is expected
  * to be interested in all events published corresponding to its superclasses and implemented interface (directly or via
  * a superclass). In short if the invocation of {@link Class#isAssignableFrom(Class)} on the event object's class with
  * the subscriber class as argument returns <code>true</code>, then that subscriber is interested in the event.
  *
- * <h6>Dispatch mode</h6> <em>All subscribers are async</em> and isolated with any other listener i.e. a slow listener
+ * <h3>Dispatch mode</h3> <em>All subscribers are async</em> and isolated with any other listener i.e. a slow listener
  * does not impact other listeners for the same event. At the same time, the event data is not copied for this isolation.
- * The overhead of this isolation will just be the cost of storing references to these events in each listeners queue. <p/>
+ * The overhead of this isolation will just be the cost of storing references to these events in each listeners queue.
  *
  * <b>A subscriber can indicate if it favors synchronous event consumption: </b> This is just a backdoor and should be
  * used with caution as then the consumption and filtering will happen in the publishing thread. Also, this behavior can
  * be overridden if the property {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS} is set to <code>false</code>. <b>In that case, the
- * events will be sent to the subscriber asynchronously. See {@link SyncSubscribersGatekeeper} for more details.</b> <p/>
+ * events will be sent to the subscriber asynchronously. See {@link SyncSubscribersGatekeeper} for more details.</b>
  *
  * There are multiple facets of this async dispatch mode which are described below:
  * <ul>
-    <li><i>Slow subscribers:<i/> In case the subscriber queue is full, the older events are rejected, one at a time and
+    <li><i>Slow subscribers:</i> In case the subscriber queue is full, the older events are rejected, one at a time and
  the event bus retries to offer the event to the subscriber, after each removal. This retry is capped at a default value
  {@link EventBus#CONSUMER_QUEUE_FULL_RETRY_MAX_DEFAULT} which can be overridden by a dynamic property:
  {@link EventBus#CONSUMER_QUEUE_FULL_RETRY_MAX_PROP_NAME}. If all the retries fail, the event is rejected.</li>
@@ -64,11 +65,11 @@ import java.util.concurrent.BlockingQueue;
  *
  * <h2>Event filtering</h2> Events can be filtered both before publishing and before receiving the same in the
  * subscriber. Filtering at the subscriber end is done per subscriber. Filtering at the publisher side rejects the event.
- * <br/> <b>All filters for the event must return true for the event to be published/received</b>
+ *
+ * <b>All filters for the event must return true for the event to be published/received</b>
  * Event filters can be expressed as a filter language as available under {@link com.netflix.eventbus.filter.lang}.
  * Such a filter can then be converted into an {@link EventFilter} using {@link com.netflix.eventbus.filter.EventFilterCompiler}
- * For relatively easy way of programmatic creation of filters, one can use the utility/factory class
- * {@link com.netflix.eventbus.filter.EventFilters}.<br/>
+ * For relatively easy way of programmatic creation of filters.
  *
  * Subscriber level filtering is done in the consumer thread and not in the thread of the event publisher. This
  * alleviates the overhead of event publishing that may be introduced by slow filter evaluation. However, it does
@@ -110,7 +111,7 @@ public interface EventBus {
 
     /**
      * Publishes events iff there is atleast one listener for any of the passed event types. See {@link EventBus}
-     * javadocs for details about conditional event publishing. <br/>
+     * javadocs for details about conditional event publishing.
      *
      * The following is done on receiving this call:
      * <ul>
@@ -135,7 +136,8 @@ public interface EventBus {
      * will attach the filter to all subscriber methods in the passed subscriber. If you need to attach different
      * filters to different methods, then you should register the subscriber without the filter
      * {@link EventBus#registerSubscriber(Object)} and then register each filter using
-     * {@link EventBus#addFilterForSubscriber} <br/>
+     * {@link EventBus#addFilterForSubscriber}
+     *
      * See {@link EventBus} javadocs for details about subscribers, filters, event-subscriber association and dispatch
      * mode.
      *
@@ -173,10 +175,10 @@ public interface EventBus {
     void disableCatchAllSubscriber();
 
     /**
-     * Removes the subscriber class (all of its subscriber methods) from the event bus. <br/>
+     * Removes the subscriber class (all of its subscriber methods) from the event bus.
      * If there are more than one instance of the passed class registered with this event bus, all of them are removed.
      *
-     * <b>All unconsumed events are rejected.</nb>
+     * <b>All unconsumed events are rejected.</b>
      *
      * @param subscriberClass Subscriber class to unregister.
      *
@@ -187,12 +189,13 @@ public interface EventBus {
     Set<Object> unregisterSubscriber(Class<?> subscriberClass);
 
     /**
-     * Removes the subscriber instance (all of its subscriber methods) from the event bus. <br/>
+     * Removes the subscriber instance (all of its subscriber methods) from the event bus.
+     *
      * If there are other subscriber instances associated with the class of the passed subscriber, they are left
      * untouched. This should be the preferred mode of unregistration when more than one instances of the same subscriber
      * class are registered and only one is to be removed.
      *
-     * <b>All unconsumed events are rejected.</nb>
+     * <b>All unconsumed events are rejected.</b>
      *
      * @param subscriber Subscriber instance to unregister.
      *
@@ -202,7 +205,7 @@ public interface EventBus {
 
     /**
      * Adds the passed filter for the passed subscriber method.
-     * See {@link EventBus} javadocs for details about subscribers & filters.
+     * See {@link EventBus} javadocs for details about subscribers &amp; filters.
      *
      * @param filter Filter to attach.
      * @param subscriberInfo Subscriber info. This can be retrieved by methods {@link EventBus#getAllSubscribersForAnEvent(Class)}
@@ -212,7 +215,7 @@ public interface EventBus {
 
     /**
      * Removes the passed filters for the passed subscriber.
-     * See {@link EventBus} javadocs for details about subscribers & filters.
+     * See {@link EventBus} javadocs for details about subscribers &amp; filters.
      *
      * @param subscriberInfo Subscriber info. This can be retrieved by methods {@link EventBus#getAllSubscribersForAnEvent(Class)}
      *                       or {@link com.netflix.eventbus.spi.EventBus#getAllSubscribers()}
@@ -222,7 +225,7 @@ public interface EventBus {
 
     /**
      * Removes all filters for the passed subscriber method.
-     * See {@link EventBus} javadocs for details about subscribers & filters.
+     * See {@link EventBus} javadocs for details about subscribers &amp; filters.
      *
      * @param subscriberInfo Subscriber info. This can be retrieved by methods {@link EventBus#getAllSubscribersForAnEvent(Class)}
      *                       or {@link com.netflix.eventbus.spi.EventBus#getAllSubscribers()}
@@ -231,7 +234,7 @@ public interface EventBus {
 
     /**
      * Adds a publisher level filter for the passed event type.
-     * See {@link EventBus} javadocs for details about publishers & filters.
+     * See {@link EventBus} javadocs for details about publishers &amp; filters.
 
      * @param filter Filter
      * @param eventClass The class of the event for which the filter is to be attached.
@@ -240,7 +243,7 @@ public interface EventBus {
 
     /**
      * Removes the passed filters for the passed event type.
-     * See {@link EventBus} javadocs for details about publishers & filters.
+     * See {@link EventBus} javadocs for details about publishers &amp; filters.
 
      * @param eventClass The class of the event for which the filter are to be removed.
      * @param filters Filters to be removed
@@ -249,14 +252,16 @@ public interface EventBus {
 
     /**
      * Removes all the filters for the passed event type.
-     * See {@link EventBus} javadocs for details about publishers & filters.
+     * See {@link EventBus} javadocs for details about publishers &amp; filters.
 
      * @param eventClass The class of the event for which the filter are to be cleared.
      */
     void clearFiltersForEvent(Class<?> eventClass);
 
     /**
-     * Returns a set of subscribers that are registered with this event bus. <br/> The details of the filter
+     * Returns a set of subscribers that are registered with this event bus.
+     *
+     * The details of the filter
      * attached (if any) can be retrieved by the method {@link EventBus#getFilterForASubscriber}
      *
      * @return An immutable set of currently registered subscribers for the passed event type.
@@ -264,7 +269,8 @@ public interface EventBus {
     Set<SubscriberInfo> getAllSubscribers();
 
     /**
-     * Returns a set of subscribers for that passed event type that are registered with this event bus. <br/>
+     * Returns a set of subscribers for that passed event type that are registered with this event bus.
+     *
      * The details of the filter attached (if any) can be retrieved by the method
      * {@link EventBus#getFilterForASubscriber(SubscriberInfo)}
      *

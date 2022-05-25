@@ -31,7 +31,8 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * A gatekeeper to allow synchronous subscribers in {@link com.netflix.eventbus.impl.EventBusImpl}. This determines whether a particular
  * subscriber annotated with {@link com.netflix.eventbus.spi.Subscribe#syncIfAllowed()} as <code>true</code>  is
- * actually allowed to be synchronous. <br/>
+ * actually allowed to be synchronous.
+ *
  * A subscriber is allowed, iff,
  * <ul>
     <li>The property {@link SyncSubscribersGatekeeper#ALLOW_SYNC_SUBSCRIBERS} is <code>true</code> </li>
@@ -50,12 +51,12 @@ import java.util.concurrent.atomic.AtomicReference;
     }
  </PRE>
 
- <h6>Example: </h6>
+ <b>Example: </b>
 
  <PRE>
  {
      "com.foo.bar.MyAllSubscriber": [], // Signifies all subscriber methods in this class will be sync, if configured so by setting {@link com.netflix.eventbus.spi.Subscribe#syncIfAllowed()} as <code>true</code>.
-     "com.foo.bar.MySubscriber": ["com.foo.bar.EventOne", "com.foo.bar.EventTwo"], // Signifies only subscrber of events EventOne & EventTwo in this class will be sync, if configured so by setting {@link com.netflix.eventbus.spi.Subscribe#syncIfAllowed()} as <code>true</code>.
+     "com.foo.bar.MySubscriber": ["com.foo.bar.EventOne", "com.foo.bar.EventTwo"], // Signifies only subscrber of events EventOne &amp; EventTwo in this class will be sync, if configured so by setting {@link com.netflix.eventbus.spi.Subscribe#syncIfAllowed()} as <code>true</code>.
      "com.foo.bar.MyAnotherSubscriber": ["com.foo.bar.Event3", "com.foo.bar.Event4"]
  }
 
@@ -70,7 +71,8 @@ public class SyncSubscribersGatekeeper {
     public static final String ALLOW_SYNC_SUBSCRIBERS = "eventbus.allow.sync.subscribers";
 
     /**
-     * Property to define a whitelist of subscribers which are allowed to be synchronous. <br/>
+     * Property to define a whitelist of subscribers which are allowed to be synchronous.
+     *
      * See {@link SyncSubscribersGatekeeper} javadocs for details of the format of this property.
      */
     public static final String SYNC_SUBSCRIBERS_WHITELIST_JSON = "eventbus.sync.subscribers.whitelist.json";

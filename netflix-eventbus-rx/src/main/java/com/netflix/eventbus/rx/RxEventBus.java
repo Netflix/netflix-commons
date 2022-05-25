@@ -33,14 +33,14 @@ public class RxEventBus {
     }
     
     /**
-     * {@link EventBus.publish}
+     * {@link EventBus#publish(Object)}
      */
     public void publish(Object event) {
         eventBus.publish(event);
     }
     
     /**
-     * {@link EventBus.publishIfNotDead}
+     * {@link EventBus#publishIffNotDead(EventCreator, Class[])}
      */
     public void publishIfNotDead(EventCreator creator, Class<?>... eventTypes) {
         eventBus.publishIffNotDead(creator, eventTypes);

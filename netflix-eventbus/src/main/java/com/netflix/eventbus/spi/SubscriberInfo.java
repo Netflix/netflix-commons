@@ -4,7 +4,8 @@ import java.lang.reflect.Method;
 
 /**
  * Metadata about a subscriber. This does <b>not</b> define any characterstics of the subscriber, its just a metadata
- * about any subscriber. <br/>
+ * about any subscriber.
+ *
  * This class is designed to be immutable.
  *
  * @author Nitesh Kant (nkant@netflix.com)

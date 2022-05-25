@@ -42,8 +42,8 @@ package com.netflix.util;
  *        }
  *        MyClass cObj = (MyClass)obj;
  *        return (membVar1 == cObj.membVar1)
- *            && HashCode.equalObjects(membVar2, cObj.membVar2)
- *            && (membVar3 == bVar3);
+ *            &amp;&amp; HashCode.equalObjects(membVar2, cObj.membVar2)
+ *            &amp;&amp; (membVar3 == bVar3);
  *    }
  *
  *    // The hash code needs to align with the

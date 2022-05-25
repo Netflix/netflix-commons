@@ -1,10 +1,10 @@
 package com.netflix.eventbus.impl;
 
 import com.netflix.servo.monitor.Monitors;
-import org.apache.commons.math.stat.StatUtils;
-import org.apache.commons.math.stat.descriptive.moment.Mean;
-import org.apache.commons.math.stat.descriptive.moment.StandardDeviation;
-import org.apache.commons.math.stat.descriptive.rank.Percentile;
+import org.apache.commons.math3.stat.StatUtils;
+import org.apache.commons.math3.stat.descriptive.moment.Mean;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
+import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
