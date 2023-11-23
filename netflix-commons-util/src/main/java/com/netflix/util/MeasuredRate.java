@@ -21,8 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Utility class for getting a count per last X milliseconds
- * @file
- * 
+ *
  * @author stonse
  * @author gkim
  * 
@@ -43,7 +42,7 @@ public class MeasuredRate {
     }
     
     /**
-     * Returns the count in the last sample interval
+     * @return the count in the last sample interval
      */
     public long getCount() {
         checkAndResetWindow();
@@ -51,7 +50,7 @@ public class MeasuredRate {
     }
     
     /**
-     * Returns the count in the current sample interval which will be incomplete. 
+     * @return the count in the current sample interval which will be incomplete.
      * If you are looking for accurate counts/interval - use {@link MeasuredRate#getCount()}
      * instead.
      */

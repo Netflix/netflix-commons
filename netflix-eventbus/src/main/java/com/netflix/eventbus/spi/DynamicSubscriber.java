@@ -5,14 +5,16 @@ package com.netflix.eventbus.spi;
  * is interested in. This in most cases is beneficial and easy to use, however, in some cases (typically event agnostic,
  * middlemen, which stores the event for later investigation), the event processing is much the same irrespective of the
  * type of event it receives. In such a case, it will be an overhead (even if possible) to define a subscriber for
- * each kind of event existing in the system. <br/>
+ * each kind of event existing in the system.
+ *
  * This special subscriber is a way to achieve dynamic interests (immutable after registration) in subscribers. Although,
  * this subscriber can only listen to one type of event but the type is defined at runtime as opposed to compile time
- * in a normal subscriber.<br/>
+ * in a normal subscriber.
+ *
  * Although, this subscriber does not mandate that the subscriber must have a subscribe method (one annotated with
  * {@link Subscribe}) listening to event type {@link Object} but in most of the cases, such a subscribe method will
  * prove to be more useful. {@link EventBus} allows specifying the subscribe method with argument {@link Object}
- * <em>only</em> for these subscribers. <br/>
+ * <em>only</em> for these subscribers.
  *
  * <b>Implementations must only have a single subscriber method or else the registration with eventbus will be rejected.</b>
  * This limitation is imposed as we do not want to make runtime decisions on which subscribe method an event must be
@@ -23,13 +25,15 @@ package com.netflix.eventbus.spi;
 public interface DynamicSubscriber {
 
     /**
-     * Returns the event type i.e. the class of the event that this subscriber will be interested in. <br/>
+     * Returns the event type i.e. the class of the event that this subscriber will be interested in.
+     *
      * {@link EventBus} allows specifying the subscribe method with argument {@link Object} <em>only</em> for
-     * these subscribers.<br/>
+     * these subscribers.
+     *
      * The implementers of this interface must make sure that the subscribe method accepts the event class returned by
      * this method.
      *
-     * @return The event type i.e. the class of the event that this subscriber will be interested in. <br/>
+     * @return The event type i.e. the class of the event that this subscriber will be interested in.
      */
     Class<?> getEventType();
 }

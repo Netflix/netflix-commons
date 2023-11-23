@@ -108,7 +108,7 @@ public class EventBusUtils {
      * subscriber method, except when the subscriber is a {@link DynamicSubscriber}, in which case the event type will
      * be as returned by {@link com.netflix.eventbus.spi.DynamicSubscriber#getEventType()}.
      * <b>It is important that the subscriber method is valid as evaluated by
-     * {@link com.netflix.eventbus.impl.SubscriberValidator}</b>
+     * com.netflix.eventbus.impl.SubscriberValidator</b>
      *
      * @param subscriber The subscriber instance in question.
      * @param subMethod The subscriber method is question.
@@ -142,7 +142,7 @@ public class EventBusUtils {
     }
 
     /**
-     * Utility method to apply filters for an event, this can be used both by publisher & subscriber code.
+     * Utility method to apply filters for an event, this can be used both by publisher &amp; subscriber code.
      *
      * @param event The event to apply filter on.
      * @param filters Filters to apply.

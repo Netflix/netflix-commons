@@ -4,11 +4,14 @@ import javax.annotation.Nullable;
 
 /**
  * A contract to handle dynamic subscriber configuration. Since, any configuration provided by {@link Subscribe}
- * annotation is inherently compile-time & constant, in cases where the configurations are to be taken from a property
- * file for instance, a subscriber must implement this interface and provide dynamic configurations. <br/>
- * These configurations will be used once & only once by eventbus at the time the subscriber is registered. <br/>
+ * annotation is inherently compile-time &amp; constant, in cases where the configurations are to be taken from a property
+ * file for instance, a subscriber must implement this interface and provide dynamic configurations.
+ *
+ * These configurations will be used once &amp; only once by eventbus at the time the subscriber is registered.
+ *
  * All the subscriber methods in a class can be configured using this provider, by pinning a configuration to a key
- * which is attached to a subscriber method by the property {@link com.netflix.eventbus.spi.Subscribe#name()}. <br/>
+ * which is attached to a subscriber method by the property {@link com.netflix.eventbus.spi.Subscribe#name()}.
+ *
  * For a subscriber that implements interface, for any subscriber method, eventbus follows the following order to get
  * the configuration for that subscriber method:
  * <ul>

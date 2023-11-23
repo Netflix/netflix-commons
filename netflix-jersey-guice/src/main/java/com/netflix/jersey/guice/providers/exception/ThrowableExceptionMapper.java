@@ -51,7 +51,7 @@ import javax.ws.rs.ext.Provider;
  * }
  * </pre>
  * 
- * @see GsonExceptionMapper
+ * @see GsonDefaultExceptionMapper
  * @author elandau
  *
  */

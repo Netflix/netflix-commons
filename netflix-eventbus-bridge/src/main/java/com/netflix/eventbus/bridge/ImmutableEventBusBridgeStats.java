@@ -2,7 +2,7 @@ package com.netflix.eventbus.bridge;
 
 /**
  * Decorator for {@link EventBusBridgeStats} that makes it unmodifiable.
- * An instance of this is returned by {@link EventBusSuroBridgeStats.getStats()}
+ * An instance of this is returned by {@link AbstractEventBusBridge#getStats()}
  * 
  * @author elandau
  *

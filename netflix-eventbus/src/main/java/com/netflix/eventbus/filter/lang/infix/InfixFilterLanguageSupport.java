@@ -1,6 +1,6 @@
 package com.netflix.eventbus.filter.lang.infix;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Predicate;
 import com.netflix.eventbus.filter.lang.FilterLanguageSupport;
