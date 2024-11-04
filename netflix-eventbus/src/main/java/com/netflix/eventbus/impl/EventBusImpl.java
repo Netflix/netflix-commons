@@ -157,7 +157,7 @@ public class EventBusImpl implements EventBus {
                 catchAllSubscriber.enqueue(event);
             }
         } catch (Throwable th) {
-            LOGGER.error("Error occured while publishing event. Swallowing the error to avoid publisher from failing.", th);
+            LOGGER.error("Error occurred while publishing event. Swallowing the error to avoid publisher from failing.", th);
             stats.publishErrors.increment();
         } finally {
             start.stop();
@@ -207,7 +207,7 @@ public class EventBusImpl implements EventBus {
                 }
             }
         } catch (Throwable th) {
-            LOGGER.error("Error occured while publishing event. Swallowing the error to avoid publisher from failing.", th);
+            LOGGER.error("Error occurred while publishing event. Swallowing the error to avoid publisher from failing.", th);
             stats.conditionalPublishErrors.increment();
         } finally {
             start.stop();
